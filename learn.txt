@@ -1,0 +1,439 @@
+                %%%###%%%       LEARNING NODE JS FROM ZERO TO HERO TO ADVANCE      %%%###%%%
+                %%%###%%%       CREATED BY --> ALI MURTAJA                     %%%###%%%
+                %%%###%%%       murtajaali10@gmail.com                         %%%###%%%
+                %%%###%%%       750949434                                      %%%###%%%
+
+
+
+----------------JS-engin
+
+- there is JS-engin to interprete/compile any js code.
+- be it runs any-where(client/server).
+- js engin is nothing but super-massive code written in c++.
+- v8 is one of them, it is js-engin provided by google and written in c++
+
+- v8 engin is open-source and it is written such that anyone add new feature init(write c++ code for new js-feature)
+see::(part 2) 4 to 4_5
+
+- all the js-enging including v8 must have to follow es-standard, and implement feature in accordance to es-standard.
+see::(part 2) 2 to 2_3
+
+- as we know v8-engin could be expand, so why not we make most of it.
+- on client side chrome took v8-engin, add more functionality(by adding c++ code) for DOM, BOM and other web-api's and provided us as `window` object.
+
+(DOM, BOM and other web-api's) --> run time enviroment
+
+- on server side, node took v8-engin, add more functionality(by adding c++ code) for file managment and other functionality needs on server side.
+
+(file managment and other functionality needs on server side) --> run time enviroment
+
+
+----------------node
+
+(c++ core)::
+    - node js wrote (c++ core) to able js use on server-side.
+    - all the c++ core are written at:: https://github.com/nodejs/node/tree/main/src
+(js core)::
+    - node js also exposed js-core(fs, path, stream and much more)
+    - and these js-core use c++ behind the scene.
+    - it means, these are the wrapper around c++ core, the reason is that we cann't use c++ directally.
+    - these is also called `native core module`.
+(v8)::
+    - we know that node-js uses v8.
+    - v8 is part of node js(dependency), that you can find in its deps folder (see: https://github.com/nodejs/node/tree/main/deps)
+
+
+-------------module/export/require
+
+module::
+    - it is reusable block of code whose existence doesn't impact other's.
+    see:: (part 4) 1 to 1_2
+
+common-js modules::
+    - it is standard or agreement for how `code-module` should be structured.
+    - before, it only added on node side.
+    - before, it was out of es-standard.
+    - but later, `es` added this feature in its es-standard.
+    - es provided more flexibility on how to import and export module, but the implementation is most similar the way node implemented.
+        see:: (part 4) 14 to 14_1
+
+how it works BS::
+    - it takes whole code written in js file wrapped it in IIFE.
+    - it also provide some args while calling IIFE(sach as import, export, require etc)
+    - since it wrapes our file of code in function(IIFE), the scope of our code is in only that funciton(IIFE), it doesn't impact any other code.
+    - and node js does it, even though we write one file.
+    - when node js wrapped our file, that file is called `module`.
+    - NOTE THAT whatever code we are writing in our file should have to follow common-js module standated.
+    - mean's any variable and properties can't be mutate by any other file.
+        see:: (part 4) 11
+    - and when it follows the rules, that file is called common-js module.
+    - over-all node js used IIFE to make module.
+    - NOTE THAT at the end we uses `module.exports` and here `module` is an argument provided by IIFE function.
+    - and this `module` is an object, and this module at the end is returned by require function.
+    - so if we mutates module object (ex: module.exports= [any expression/statement]), it reflects its original object, and this reflects object is returned by `require` function.
+    - if you require any module, that module gets cache, after that if you require same module, the subsequent module gets import from cache module.  
+    
+    see:: (part 4) 8 to 8_2
+
+First-class-function-expression::
+    see::
+    reason:: 
+        - the reason is that we know that function in js is nothing but object.
+        - and we can pass/return/assign and js object, so we could do it for funciton also.
+        see:: (part 4) 2 to 2_1
+
+exports / module.exports ::
+    see:: (part 4) 12 to 12_1
+
+IIFE::
+    see:: (part 4) 7 to 7_3
+
+
+-------------Events and the Event Emitter
+
+In node, there are two type of event.
+    1) Custome event (java-script core)::
+        - event happens on js side and has nothing do to with system-event is called custome evnet.
+        - usally defined on js-core side.
+    1) System event (libuv)::
+        - events happens on system(os) called system-events.
+        - usally defi
+        - written in `c`
+
+-------------Asynchronous Code, libuv, The Event Loop, Streams, Files, and more
+
+
+Asynchronous Code::
+    - there is js-engin as browser in node-js.
+    - and js-engin works syncrounouslly, and it can be expand by writing c++ code.
+    - and node js made most of it and created libuv file responsible for IO opration(system request and event)
+    - this libuv has event-Loop, sees any event in its queue if any, pass it to v8-engin to be executed if js-enging empty.
+    - NOTE THAT multiple task could be done simultanouslly.
+            - but keep in mind v8 engin only handles one task at time, its syncrounouslly.
+            - if we have code for IO opration, that opration is done by another thread which is outside the js-engin(be it os or run-time enviroment)
+            - and if it is done it pass the respected callback to event-queue. 
+            - so two tast could be processing simultanouslly:
+                1:- js side
+                2:- OS-side
+
+stream/buffer::
+    - usally server-side code works with binary-data(raw-data), and doesn't deal with binary-data(raw-data).
+    - that'y node js implemented `buffer` in its core to deal-with binary-data(raw-data), however in new Ecma-script standard, it has implemented `buffer` to deal-with binary-data(raw-data), even-after node-js uses its core `buffer` library.
+    - and these raw which is stored in `buffer`, and these `buffer` itself are stored in heap-memory of the node js. 
+    - any request/response in node, comes and go in stream.
+    - and it uses buffer to store any stream's data.
+    - NOTE THAT buffer only holds binary data, even though we converted it in utf-8 in buffer, yet it stored that converted data in binary-formate. 
+    - NOTE THAT usally you can't use buffer directally, yes you might be.
+     but buffer can be use through other utility inside node.
+    - by-defalf `buffer` has 64kb size when we store raw file data(when we use `readable` and `writable` file stream)
+
+-----------body-parser
+
+- previouse Express had built-in body-pare, but it removed later, and started using as a sparate package called `body-parser`.
+- but current Express has both built in body-parser and used body-parser as a saparete package.
+- it is recommaded to use saparete body-package, the reason is that it could be removed again.
+
+
+------------Middleware
+
+- if you use any Middleware excepting `use`, it matches the exact match. 
+
+---------------Event-driven Architechture
+
+- Node uses Event-driven Architechture.
+- it means it calls any funciton that take another funciton as a argument, and that callback are called when task is done.
+
+----------node
+
+- process.exit:
+    we know that event-loop keep on running as long as there is any event-litener registered.
+    but we can forcelly terminate event-loop(process) by calling exit method
+                        process.exit()
+
+- whenere we request for any data/webpage/or any-thing from the server, and we doesn't response immadiatally instead we do IO opration on server that takes time and after completin IO opration we send response, then the request remain in pending state from the time we request to untill we send the response.
+    ex::
+        request(browser) --> server(io opration) //taking 10sec.
+        server response(after 10) --> pending state --> clientg(browser)
+
+- path.join::
+    - whenever we access file from the file-system(raw/text files).
+    - we have to use absolute path, and different os use absolute path differentlly.
+    - that'y `path.join` helps us to get absolute path according to os.
+
+----------Express
+
+##MVC
+
+- Express application should follow MVC pattern.
+    see::- D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-7\04-refactored-code\app.js
+
+##public file::
+
+- in node, we can't use file-System(Files) directally.
+- whatever file we use, there is respective route defined in express, which is responsible to render our file(html).
+- but what-about other files like (css, js etc), which are used directally.
+    - to do that we have to give the permissing for that file/folder to be avaliable publically and access directall
+
+- in node it is complex method, but express gives us Middleware funciton using that we can give specific file/folder to be avaliable publically and access directall.
+    ex--> app.use(express.static(path.join(__dirname, 'public')));
+
+##segment/dynamic-rout/quary-string::
+
+ex::
+    www.[domain]/file1/[segment]?quary1=val1&quary2=val2
+
+- if you have specific route and segment, wtite specific route at the top of segment, otherwise request will not able to reach to the specific route.
+    ex::(wrong)
+        www.[domain]/file1/[segment]?quary1=val1&quary2=val2
+        www.[domain]/file1/delete
+    ex::(write)
+        www.[domain]/file1/delete
+        www.[domain]/file1/[segment]?quary1=val1&quary2=val2
+
+- quary-string:: it is option data could be passed along with the url, keep in mind these are option data.
+
+##npm start::
+    - this is one time process, and we can do all the configuration on `npm start` which have to be done only one time.
+        ex:: 
+            - we can create modal in respect of table.
+            - we can do relationship between table.
+    - and for the all subsequent request, there are respective Middleware 
+        ex::
+            app.use(()=>{})
+            app.get('/get' ,()=>{})
+
+        - and other configuration will not execute again, only Middleware and routes will be executed.
+
+##NOTE THAT
+    - by default express uses `contentType: 'application/html`, if we response with text file
+    - NOTE THAT whatever template-enging you use(ejs, pug etc), there is only one method called `render` on res object provided by the Express.
+    - and this method is used to get the dynamic data from express in the template
+        ex::  res.render('add-product', {
+                pageTitle: 'Add Product',
+                path: '/admin/add-product',
+                formsCSS: true,
+                productCSS: true,
+                activeAddProduct: true
+            });
+
+
+
+##
+    - To learn more about Express visite --> http://expressjs.com/
+
+------------Packages
+
+##body-parser::
+    - use to parse the request data.
+    - NOTE TAHT this package parses only text data. if we use form, it convert into text in request.
+
+    ex::
+        // parse application/x-www-form-urlencoded
+        app.use(bodyParser.urlencoded({ extended: false }))
+
+        // parse application/json
+        app.use(bodyParser.json())
+
+
+----------Mongoose
+
+1)  see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-13-NOTES\02-saving-data-through-mongoose\models\product.js
+
+2) const userSchema = new Schema({
+        name: {
+            type: String,  -->  NOTE THAT here `String` is not type(if you came from TS background), it is normal global object provided by node `Globle` object.
+            required: true
+        },
+    })
+
+3)  see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-13-NOTES\08-loading-the-cart\app.js
+
+
+-------session and coockies
+
+Old approach(with out using restAPIs)::
+    - in Tradition approach(when views were rendered from server side), that's where cookies and session were used.
+    - cookies are stored in client side, where as session are stored on server-side.
+        - The reason is that we can't store sensitive data in coockies (on client side), that'y we store sensitive into session (on server side)
+        - But we have to use coockies/session both together to remain the session of the specific client.
+        - we only store the specific random data in coockies and attach them with specific user data and send only coockies to client.
+        - and subsequent client req we extract coockies and get related user data.
+        - and that's how we don't expose any sensitive data to client but random coockies value. 
+
+
+    see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\02-adding-the-request-driven-solution\controllers\auth.js
+    
+    see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\03-configuring-cookies\controllers\auth.js
+
+    see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\04-using-the-session-middleware\app.js
+
+    see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\04-using-the-session-middleware\controllers\auth.js
+
+    see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\05-using-mongodb-session-store\app.js
+
+
+    NOTE THAT::
+        D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\06-deleting-a-cookie
+            - from this folder changed to store `user` data into `req` object were being applied as a middleware. instead we are store data into session while loging.
+            - NOTE THAT if you store any mongodb data in 
+                --> D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\06-deleting-a-cookie\controllers\auth.js
+                            --> from line number 11 to 19
+
+
+    NOTE THAT::
+            - In old Tradition(when we used to rendering views from server-side), we used to used session/coockies approach to handle authentication.
+                see:: d:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-15\3.png
+
+    NOTE THAT::
+        1)
+            const { body } = require('express-validator/check');
+            router.post(
+                '/add-product',
+                // here `express-validator` is making the most of express, doing operation, add required info in `req` object and call `next` function for the next middleware to be ru
+                [
+                    body('title')
+                    .isString()
+                    .isLength({ min: 3 })
+                    .trim(),
+                    body('imageUrl').isURL(),
+                    body('price').isFloat(),
+                    body('description')
+                    .isLength({ min: 5, max: 400 })
+                    .trim()
+                ],
+                isAuth,
+                adminController.postAddProduct
+            );
+
+            2)
+                body('confirmPassword')
+                .trim()
+                .custom((value, { req }) => {
+                    if (value !== req.body.password) {
+                    // here our application will not get crashed, `express-validator` must have handled it
+                    throw new Error('Passwords have to match!');
+                    }
+                    return true;
+                })
+
+----------------what we are doing in part-13
+
+- we are creating a user(if user not exists) when starts the node app.
+- attatch that `user`(mongoose modal object) in `user` properties of the `req` object in every request(used middleware).
+- add the product with `user`(which we added in `req` object).
+- add product to cart --> used `user` table and stored product info with `user` (which we added in `req` object).
+- place order --> used `order` table and stored product info with `user` (which we added in `req` object).
+
+------------------------------------------------- need to learn
+
+->need to learn::
+    package-->csurf
+    package-->flash
+    package-->bcryptjs
+    package-->crypto
+    package-->csurf
+    package-->connect-flash
+    package-->multer
+    package-->pdfkit
+
+->pending --> D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-14-NOTES\07-fixing-some-minor-bugs
+
+
+--->>
+    app.use((req, res, next) => {
+        res.locals.isAuthenticated = req.session.isLoggedIn;
+        res.locals.csrfToken = req.csrfToken();
+        next();
+    });
+
+------------------------------------------------- part-13
+
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-16-NOTES\01-using-nodemailer-to-send-emails\controllers\auth.js
+
+- we have used `nodemailer-sendgrid-transport` to send mail.
+NOTE THAT handling mail is very complex-task, so usally we use thrid party mail server to get mail sent.
+
+-------------------------- part-17
+
+Reset password
+    For full Implementation
+        see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-17-NOTES\04-adding-logic-to-update-password\app.js
+
+----------------------------- part-18
+
+Validation
+    For full Implementation
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\09-validating-product-editing\routes\admin.js
+
+----------------------------- part-19
+
+Error handling
+
+there might be three type of Error
+
+1) Technical Err / Network Err
+1) Expected Err
+1) bug related
+    see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-19\2.png
+
+Error throw::
+    in js `Error` is built in object, which can be through, 
+    NOTE THAT if there is any `Technical Err`, `Error through` occurs automatically.
+    we could also `through Err` manually
+
+    For full Implementation
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-19-NOTES\01-errors-some-theory\error-playground.js
+        
+        line 77 to 84
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-19-NOTES\04-status-codes\app.js
+
+        line 76 to 79
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-19-NOTES\04-status-codes\controllers\admin.js
+
+----------------------------- part-20
+
+- need to see all lecture
+
+----------------------------- part-21
+
+Pagination
+
+    For full Implementation
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-21-NOTES\04-re-using-pagination-logic\app.js
+
+        line 15
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-21-NOTES\04-re-using-pagination-logic\controllers\shop.js
+
+----------------------------- part-23
+
+Payment
+
+    For full Implementation
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-23-NOTES\02-using-stripe\views\shop\checkout.ejs
+
+        line 143
+        see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-23-NOTES\02-using-stripe\controllers\shop.js
+
+
+----------------------------- part-24-25
+
+Api end point --> in rest world `Api end point` is a combination of `method` and `route`
+
+- in rest world we can also use `post` method to delete the resource.
+- but it is standard to use repective method to do respictive operation.
+
+get --> use get method to get resource
+post --> use post method to create or append resource(should not overrite)
+put --> use put method to create or overrite resource
+patch --> use patch method to update the part of resource
+delete --> use delete method to delete resource
+options --> is called automatically by browser to determine whether follow up request is allowed or not.
+
+NOTE THAT   
+    - in traditional, we only got to use get/post method (using anchor tag, form etc), but in rest we have choise like get/post/put/patch/delete.
+
+    - in traditional, we used `app.use(bodyParser.urlencoded());` to parse `x-www-form-urlencoded` data
+    - but in rest world we need to use `app.use(bodyParser.json());` to parse `json` data
+
+cors issue --> it is issue raised by the browser if both server and client located on different domain, we could disable this feature from server side and tell browser that it can use our resource
+    see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-24-NOTES\02-sending-post-requests\app.js
