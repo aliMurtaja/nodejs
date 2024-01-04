@@ -16,8 +16,8 @@ router.post(
   [
     check('email')
       .isEmail()
-      .withMessage('Please enter a valid email.')
-      .custom((value, { req }) => {
+      .withMessage('Please enter a valid email.')  // if email is incorrect (will apply for --> isEmail() )
+      .custom((value, { req }) => { // if isEmail() pass, we could use our coustom validation on valid mail(bcs isEmail passed at this time)
         if (value === 'test@test.com') {
           throw new Error('This email address if forbidden.');
         }

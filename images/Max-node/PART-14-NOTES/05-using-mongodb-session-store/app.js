@@ -11,7 +11,7 @@ const User = require('./models/user');
 
 const app = express();
 
-// here we are configuring the sesstion storage, actually node js uses its memory to store the session data.
+// here we are configuring the sesstion storage, actually by-default node-js uses its memory to store the session data.
 // but session data could be more if millions of clients request to the sever, so here we are using mongodb db to store session data. 
 const store = new MongoDBStore({
   uri: `mongodb+srv://murtajaali10:1553642589aA@cluster0.7dfepbx.mongodb.net/shop?retryWrites=true&w=majority`,

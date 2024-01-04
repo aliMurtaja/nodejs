@@ -22,7 +22,7 @@ const authRoutes = require('./routes/auth');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// here we are using `express-session` as a middleware, if sesion is not created, it creats, otherwise uses which is created before.
+// here we are using `express-session` as a middleware, if sesion is not created, it creats, otherwise will use which was created before.
 // this will work with cookeis to recognize the client.
   // --> only store the random key on client side as a cookeis and map them with session on server side.
   // --> store all sensitive information in session.

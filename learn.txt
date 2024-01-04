@@ -172,9 +172,9 @@ stream/buffer::
 - in node, we can't use file-System(Files) directally.
 - whatever file we use, there is respective route defined in express, which is responsible to render our file(html).
 - but what-about other files like (css, js etc), which are used directally.
-    - to do that we have to give the permissing for that file/folder to be avaliable publically and access directall
+    - to do that we have to give the permissing for that file/folder to be avaliable publically and access directally
 
-- in node it is complex method, but express gives us Middleware funciton using that we can give specific file/folder to be avaliable publically and access directall.
+- in node it is complex method, but express gives us Middleware funciton using that we can give specific file/folder to be avaliable publically and access directally.
     ex--> app.use(express.static(path.join(__dirname, 'public')));
 
 ##segment/dynamic-rout/quary-string::
@@ -346,7 +346,20 @@ Old approach(with out using restAPIs)::
         next();
     });
 
-------------------------------------------------- part-13
+-------------------------------------------------part-15
+
+// bcs `req.session` is async opration, that's why we saved session forcefully 
+    return req.session.save(err => {
+        console.log(err);
+        res.redirect('/');
+    });
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-15-NOTES\06-adding-csrf-protection\controllers\auth.js
+
+to encrypt password
+    const bcrypt = require('bcryptjs');
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-15-NOTES\06-adding-csrf-protection\controllers\auth.js
+
+------------------------------------------------- part-16
 
 see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-16-NOTES\01-using-nodemailer-to-send-emails\controllers\auth.js
 
@@ -360,6 +373,18 @@ Reset password
         see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-17-NOTES\04-adding-logic-to-update-password\app.js
 
 ----------------------------- part-18
+
+simple validation::
+    see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\01-setup-and-basic-validation\routes\auth.js
+    see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\01-setup-and-basic-validation\controllers\auth.js
+
+see::
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\04-checking-for-field-equality\routes\auth.js
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\05-added-async-validation\controllers\auth.js
+
+see::
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\06-keeping-user-input\routes\auth.js
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\06-keeping-user-input\controllers\auth.js
 
 Validation
     For full Implementation
@@ -437,3 +462,50 @@ NOTE THAT
 
 cors issue --> it is issue raised by the browser if both server and client located on different domain, we could disable this feature from server side and tell browser that it can use our resource
     see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-24-NOTES\02-sending-post-requests\app.js
+
+NOTE THAT::
+     .then(result => {
+        res.status(201).json({
+            message: 'Post created successfully!',
+            post: result
+        });
+    })
+
+    - here we didn't use `return` keyword, the reason is we are not writing any statement after res.status...
+
+----------------------------- part-26
+
+NOTE THAT in node, if you `throw` any `err` in any async block(ex:: promise), it won't call `Express' err middleware`, you have to use `next` function.
+    ex::
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);  // --> will call the `Express' err middleware`
+        });
+- but if you write sync code, and want to throw Err in sync code, you can throw err directally, and it will call `Express' err middleware`,
+    ex::
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const error = new Error('Validation failed, entered data is incorrect.');
+            error.statusCode = 422;
+            throw error;  // --> will call the `Express' err middleware`
+        }
+
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\04-static-images-and-error-handling\controllers\feed.js
+
+
+##multer::
+    - we learnt `body-parser`, which is used to parses the incoming data be it `urlencoded` or `json`.
+    - but this `body-parser` is not able to parse binary data, so to parse the binary data we have to use `multer` package, which parse the binary data as well.
+
+see::
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\10-backend-adding-auth-middleware-to-all-routes\app.js
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\10-backend-adding-auth-middleware-to-all-routes\controllers\feed.js <-- line 45
+
+
+
+full example with rest api and jwt
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\10-backend-adding-auth-middleware-to-all-routes
+
+-----------------------------------

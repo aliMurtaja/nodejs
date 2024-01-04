@@ -32,6 +32,8 @@ exports.postLogin = (req, res, next) => {
           if (doMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
+
+            // bcs `req.session` is async opration, that's why we saved session forcefully 
             return req.session.save(err => {
               console.log(err);
               res.redirect('/');
