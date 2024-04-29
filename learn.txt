@@ -133,7 +133,6 @@ stream/buffer::
 - but current Express has both built in body-parser and used body-parser as a saparete package.
 - it is recommaded to use saparete body-package, the reason is that it could be removed again.
 
-
 ------------Middleware
 
 - if you use any Middleware excepting `use`, it matches the exact match. 
@@ -148,7 +147,7 @@ stream/buffer::
 - process.exit:
     we know that event-loop keep on running as long as there is any event-litener registered.
     but we can forcelly terminate event-loop(process) by calling exit method
-                        process.exit()
+        process.exit()
 
 - whenere we request for any data/webpage/or any-thing from the server, and we doesn't response immadiatally instead we do IO opration on server that takes time and after completin IO opration we send response, then the request remain in pending state from the time we request to untill we send the response.
     ex::
@@ -206,7 +205,7 @@ ex::
 
 ##NOTE THAT
     - by default express uses `contentType: 'application/html`, if we response with text file
-    - NOTE THAT whatever template-enging you use(ejs, pug etc), there is only one method called `render` on res object provided by the Express.
+    - NOTE THAT whatever template-enging you use(ejs, pug etc), there is only one method called `render` on `res` object provided by the Express.
     - and this method is used to get the dynamic data from express in the template
         ex::  res.render('add-product', {
                 pageTitle: 'Add Product',
@@ -215,8 +214,6 @@ ex::
                 productCSS: true,
                 activeAddProduct: true
             });
-
-
 
 ##
     - To learn more about Express visite --> http://expressjs.com/
@@ -241,7 +238,7 @@ ex::
 
 2) const userSchema = new Schema({
         name: {
-            type: String,  -->  NOTE THAT here `String` is not type(if you came from TS background), it is normal global object provided by node `Globle` object.
+            type: String,  -->  NOTE THAT here `String` is not type(if you came from TS background), it is normal global function provided by node `Globle` object.
             required: true
         },
     })
@@ -289,7 +286,7 @@ Old approach(with out using restAPIs)::
             const { body } = require('express-validator/check');
             router.post(
                 '/add-product',
-                // here `express-validator` is making the most of express, doing operation, add required info in `req` object and call `next` function for the next middleware to be ru
+                // here `express-validator` is making the most of express, doing operation, add required info in `req` object and call `next` function for the next middleware to be run
                 [
                     body('title')
                     .isString()
@@ -324,7 +321,7 @@ Old approach(with out using restAPIs)::
 - add product to cart --> used `user` table and stored product info with `user` (which we added in `req` object).
 - place order --> used `order` table and stored product info with `user` (which we added in `req` object).
 
-------------------------------------------------- need to learn
+-------------------------------------------------need to learn
 
 ->need to learn::
     package-->csurf
@@ -359,20 +356,20 @@ to encrypt password
     const bcrypt = require('bcryptjs');
 see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-15-NOTES\06-adding-csrf-protection\controllers\auth.js
 
-------------------------------------------------- part-16
+-------------------------------------------------part-16
 
 see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-16-NOTES\01-using-nodemailer-to-send-emails\controllers\auth.js
 
 - we have used `nodemailer-sendgrid-transport` to send mail.
 NOTE THAT handling mail is very complex-task, so usally we use thrid party mail server to get mail sent.
 
--------------------------- part-17
+--------------------------part-17
 
 Reset password
     For full Implementation
         see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-17-NOTES\04-adding-logic-to-update-password\app.js
 
------------------------------ part-18
+-----------------------------part-18
 
 simple validation::
     see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\01-setup-and-basic-validation\routes\auth.js
@@ -390,7 +387,7 @@ Validation
     For full Implementation
         see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-18-NOTES\09-validating-product-editing\routes\admin.js
 
------------------------------ part-19
+-----------------------------part-19
 
 Error handling
 
@@ -415,11 +412,11 @@ Error throw::
         line 76 to 79
         see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-19-NOTES\04-status-codes\controllers\admin.js
 
------------------------------ part-20
+-----------------------------part-20
 
 - need to see all lecture
 
------------------------------ part-21
+-----------------------------part-21
 
 Pagination
 
@@ -429,7 +426,14 @@ Pagination
         line 15
         see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-21-NOTES\04-re-using-pagination-logic\controllers\shop.js
 
------------------------------ part-23
+-----------------------------part-23
+
+async request::
+
+    async request is request in which client request the server and doen't wait for the response and execute the next line(I knew, so no need to elaborate deeply)
+
+    see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-23-NOTES\02-using-stripe\views\admin\products.ejs
+    see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-23-NOTES\02-using-stripe\public\js\admin.js
 
 Payment
 
@@ -440,9 +444,9 @@ Payment
         see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-23-NOTES\02-using-stripe\controllers\shop.js
 
 
------------------------------ part-24-25
+-----------------------------part-24-25
 
-Api end point --> in rest world `Api end point` is a combination of `method` and `route`
+Api - end point --> in rest world `Api - end point` is a combination of `method` and `route`
 
 - in rest world we can also use `post` method to delete the resource.
 - but it is standard to use repective method to do respictive operation.
@@ -460,7 +464,23 @@ NOTE THAT
     - in traditional, we used `app.use(bodyParser.urlencoded());` to parse `x-www-form-urlencoded` data
     - but in rest world we need to use `app.use(bodyParser.json());` to parse `json` data
 
-cors issue --> it is issue raised by the browser if both server and client located on different domain, we could disable this feature from server side and tell browser that it can use our resource
+CORS::
+
+// Client-Side: CORS is enforced by web browsers on the client side. When a web page hosted on one domain makes a request to a different domain (cross-origin request), the browser checks if the server of the target domain allows the request. If not, the browser blocks the request to protect against potential security risks.
+// Server-Side: While the enforcement of CORS happens on the client side, the server plays a crucial role in determining whether to allow or deny cross-origin requests. The server needs to include specific CORS headers in its responses to inform the browser about which origins are permitted to access its resources.
+    
+    app.use((req, res, next) => {
+        // here we set at beging, so that it can start its journy properly
+        // To allow the origin
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        // To allow the method
+        res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
+        // To allow the header
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        console.log("reached 1", req.body)
+        next();
+    });
+
     see: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-24-NOTES\02-sending-post-requests\app.js
 
 NOTE THAT::
@@ -473,7 +493,7 @@ NOTE THAT::
 
     - here we didn't use `return` keyword, the reason is we are not writing any statement after res.status...
 
------------------------------ part-26
+-----------------------------part-25
 
 NOTE THAT in node, if you `throw` any `err` in any async block(ex:: promise), it won't call `Express' err middleware`, you have to use `next` function.
     ex::
@@ -492,7 +512,7 @@ NOTE THAT in node, if you `throw` any `err` in any async block(ex:: promise), it
             throw error;  // --> will call the `Express' err middleware`
         }
 
-see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\04-static-images-and-error-handling\controllers\feed.js
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-25-NOTES\04-static-images-and-error-handling\controllers\feed.js
 
 
 ##multer::
@@ -500,12 +520,84 @@ see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\04-s
     - but this `body-parser` is not able to parse binary data, so to parse the binary data we have to use `multer` package, which parse the binary data as well.
 
 see::
-    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\10-backend-adding-auth-middleware-to-all-routes\app.js
-    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\10-backend-adding-auth-middleware-to-all-routes\controllers\feed.js <-- line 45
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-25-NOTES\10-backend-adding-auth-middleware-to-all-routes\app.js
+    D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-25-NOTES\10-backend-adding-auth-middleware-to-all-routes\controllers\feed.js <-- line 45
 
+JWT::
+
+    // here we are creating the token called jsonwebtoken
+    // we pass this token to client and client will sent these token back to us in every subsquent-request
+    // and we verify that token using secret-key, if verification success', we allow that request to be process.
+    // that's how authentication is done.
+    // NOTE THAT in this token, we can use any data, and we could also obtaing data using some website --> https://jwt.io/
+    // but if change any data on client side, token will also be changed, and server will fail to verify token.
+    // it means we can't change data from client side.
+    // NOTE THAT if you change the data, all the token will be change, but if you change the secrete-key, only secret-kys' part will be changed 
 
 
 full example with rest api and jwt
-see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\10-backend-adding-auth-middleware-to-all-routes
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-25-NOTES\10-backend-adding-auth-middleware-to-all-routes\controllers\auth.js
+D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-25-NOTES\10-backend-adding-auth-middleware-to-all-routes\middleware\is-auth.js
 
------------------------------------
+
+MULTER::
+
+// In the destination function, cb(null, 'uploads/') essentially tells Multer that there are no errors (null), and the destination folder for storing the file is "uploads/".
+// In the filename function, cb(null, Date.now() + '-' + file.originalname) similarly indicates that there are no errors, and the generated filename for the uploaded file is a timestamp concatenated with the original filename.
+// The cb function is a common pattern in Node.js, especially in asynchronous operations, where you use a callback to signal the completion of a task or handle errors.
+
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  }
+});
+// The upload.single('file') middleware is used to handle a single file upload. The parameter 'file' corresponds to the name attribute of the file input field in your HTML form.
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+);
+
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-25-NOTES\06-backend-uploading-images\app.js
+
+-----------------------------------part-26
+
+async/await
+
+- write the async task in syncrounouse way, but behind the scene it works asynchronouslly, mean it transform async/await to then/catch block
+
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-26-NOTES\assignment-backend-solution\controllers
+
+-----------------------------------part-29
+
+see:: D:\MURTAJA\LEARNING\JS\learn-un-node-js\images\Max-node\PART-29-NOTES\01-using-environment-variables\package.json
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production MONGO_USER=maximilian MONGO_PASSWORD=9u4biljMQc4jjqbe MONGO_DEFAULT_DATABASE=shop STRIPE_KEY=sk_test_T8OE02SHDZWLwk4TYtrWlsat node app.js",
+    "start-server": "node app.js",
+    "start:dev": "nodemon app.js"
+  },
+
+  here:: 
+    1) "start": "NODE_ENV=production MONGO_USER=maximilian MONGO_PASSWORD=9u4biljMQc4jjqbe MONGO_DEFAULT_DATABASE=shop STRIPE_KEY=sk_test_T8OE02SHDZWLwk4TYtrWlsat node app.js",
+
+        --> this is production script and this script will be run by hosting provider, and that hosting provider must have interface to provide enviroment variables.
+        --> bcs we don't have any hosting-provider, so we passed variables manually at the time of `start` the script 
+
+    2) "start:dev": "nodemon app.js"
+
+        --> this is development script which will be run by us(developer)
+        --> and we also created nodemon.json file, and we declared some variable in that file.
+        --> so whenerver our app start using nodemone, nodemon uses that variable as a enviroment variables
+
+## LOGING::
+
+    // HTTP request logger middleware for node.js --> https://www.npmjs.com/package/morgan
+    const morgan = require('morgan')
+
+    - in this section we deployed our node app on heroku hosting provider.
+    - heroku provides its cli, using cli we could deployed our code.
+    - Actually heroku uses git, and also it provide the remote repository, we can commit our code using heroku cli, and pull and deploye new code accordingally
